@@ -2009,6 +2009,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -2016,9 +2018,6 @@ dayjs__WEBPACK_IMPORTED_MODULE_0___default.a.extend(dayjs_plugin_isBetween__WEBP
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "home",
   computed: {
-    eventState: function eventState() {
-      return this.event.length > 2 ? true : false;
-    },
     disabledDates: function disabledDates() {
       return {
         to: new Date(2020, 0, 1),
@@ -2232,25 +2231,33 @@ dayjs__WEBPACK_IMPORTED_MODULE_0___default.a.extend(dayjs_plugin_isBetween__WEBP
         result.push(dayjs__WEBPACK_IMPORTED_MODULE_0___default()(date_convert).format('YYYY-MM-DD'));
       }
 
-      for (var counter = 0; counter <= this.dates.length; counter++) {
-        this.dates[counter].showEvent = false;
-        this.selectedDate = [];
+      if (this.startDate !== '' && this.endDate !== '') {
+        if (this.selected.length) {
+          for (var counter = 0; counter <= this.dates.length; counter++) {
+            this.dates[counter].showEvent = false;
+            this.selectedDate = [];
 
-        for (var date_counter = 0; date_counter < result.length; date_counter++) {
-          if (this.dates[counter].dateValue === result[date_counter]) {
-            for (var day_counter = 0; day_counter <= this.selected.length; day_counter++) {
-              if (dayjs__WEBPACK_IMPORTED_MODULE_0___default()(result[date_counter]).format('ddd') === this.selected[day_counter]) {
-                console.log(true);
-                this.dates[counter].showEvent = true;
-                this.test_method(this.event, this.dates[counter].dateValue);
-                this.finalevent = this.event; // const { data } = window.axios.get('/api/events/create');
-                // console.log(data);
+            for (var date_counter = 0; date_counter < result.length; date_counter++) {
+              if (this.dates[counter].dateValue === result[date_counter]) {
+                for (var day_counter = 0; day_counter <= this.selected.length; day_counter++) {
+                  if (dayjs__WEBPACK_IMPORTED_MODULE_0___default()(result[date_counter]).format('ddd') === this.selected[day_counter]) {
+                    console.log(true);
+                    this.dates[counter].showEvent = true;
+                    this.test_method(this.event, this.dates[counter].dateValue);
+                    this.finalevent = this.event; // const { data } = window.axios.get('/api/events/create');
+                    // console.log(data);
+                  }
+                }
+              } else {
+                console.log(false);
               }
             }
-          } else {
-            console.log(false);
           }
+        } else {
+          alert('please select desired day');
         }
+      } else {
+        alert('please input date');
       }
     },
     test_method: function test_method(event_val, event_date_val) {
@@ -57143,9 +57150,9 @@ var render = function() {
         _c("b-form-input", {
           attrs: {
             id: "input-event",
-            state: _vm.eventState,
             "aria-describedby": "input-event-help input-event-feedback",
             placeholder: "Enter event name",
+            required: true,
             trim: ""
           },
           model: {
@@ -57171,7 +57178,8 @@ var render = function() {
                 id: "startDate",
                 name: "startDate",
                 "disabled-dates": _vm.disabledDates,
-                format: _vm.customFormatter
+                format: _vm.customFormatter,
+                required: true
               },
               model: {
                 value: _vm.startDate,
@@ -57190,7 +57198,8 @@ var render = function() {
                 id: "endDate",
                 name: "endDate",
                 "disabled-dates": _vm.disabledDates,
-                format: _vm.customFormatter
+                format: _vm.customFormatter,
+                required: true
               },
               model: {
                 value: _vm.endDate,

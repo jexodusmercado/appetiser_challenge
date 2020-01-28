@@ -5,9 +5,9 @@
                 <b-form-input
                   id="input-event"
                   v-model="event"
-                  :state="eventState"
                   aria-describedby="input-event-help input-event-feedback"
                   placeholder="Enter event name"
+                  :required="true"
                   trim
                 ></b-form-input>
 
@@ -19,6 +19,7 @@
                     class="pl-2"
                     :disabled-dates="disabledDates"
                     :format="customFormatter"
+                    :required="true"
                     ></datepicker>
                 
                     <label for="endDate">End Date:</label>
@@ -29,6 +30,7 @@
                     v-model="endDate"
                     :disabled-dates="disabledDates"
                     :format="customFormatter"
+                    :required="true"
                     ></datepicker>
                 </div>
 
@@ -75,9 +77,6 @@ dayjs.extend(isBetween)
   	name: "home",
 
     computed: {
-      eventState() {
-        return this.event.length > 2 ? true : false
-      },
       disabledDates()  {
         return{
             to: new Date(2020, 0, 1),
@@ -155,36 +154,45 @@ dayjs.extend(isBetween)
                     result.push(dayjs(date_convert).format('YYYY-MM-DD'));
             }          
 
-            for(let counter = 0; counter <= this.dates.length; counter++){
-                        this.dates[counter].showEvent = false;
-                        this.selectedDate = [];
-                
-                for(let date_counter = 0; date_counter < result.length; date_counter++){
+            if( this.startDate !== '' && this.endDate !== ''){
 
-                    if(this.dates[counter].dateValue === result[date_counter]){
+            	if( this.selected.length){
+		            for(let counter = 0; counter <= this.dates.length; counter++){
+		                        this.dates[counter].showEvent = false;
+		                        this.selectedDate = [];
+		                
+		                for(let date_counter = 0; date_counter < result.length; date_counter++){
 
-                        for(let day_counter = 0; day_counter <= this.selected.length; day_counter++){
+		                    if(this.dates[counter].dateValue === result[date_counter]){
 
-                            if(dayjs(result[date_counter]).format('ddd') === this.selected[day_counter]){
+		                        for(let day_counter = 0; day_counter <= this.selected.length; day_counter++){
 
-                                console.log(true);
-                                this.dates[counter].showEvent = true;
-            					this.test_method(this.event,this.dates[counter].dateValue)
-                                this.finalevent = this.event;
-                                // const { data } = window.axios.get('/api/events/create');
-                                // console.log(data);
-        
-                            }
+		                            if(dayjs(result[date_counter]).format('ddd') === this.selected[day_counter]){
 
-                        }
-                        
-                    }else{
-                        console.log(false);
-                    }
+		                                console.log(true);
+		                                this.dates[counter].showEvent = true;
+		            					this.test_method(this.event,this.dates[counter].dateValue)
+		                                this.finalevent = this.event;
+		                                // const { data } = window.axios.get('/api/events/create');
+		                                // console.log(data);
+		        
+		                            }
 
-                }
+		                        }
+		                        
+		                    }else{
+		                        console.log(false);
+		                    }
 
-            }
+		                }
+
+		            }
+		        }else{
+		        	alert('please select desired day');
+		        }
+	        }else{
+	        	alert('please input date');
+	        }
 
     	},
     	test_method(event_val, event_date_val){
